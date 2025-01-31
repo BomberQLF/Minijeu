@@ -4,8 +4,8 @@ class Country
 {
     private int $id = 0;
     private string $nom = "";
-    private int $hp = 0;
-    private int $atk = 0;
+    private int $pv = 0;
+    private int $attaque = 0;
     private ?string $image = null;
     public const MAXHP = 100;
     private static $compteur = 0;
@@ -31,22 +31,21 @@ class Country
         return 'Votre personnage s\'appelle ' . $this->nom;
     }
 
-    public function crier()
-    {
-        return 'Vous ne passerez pas !';
-    }
-
-    public function reparer($soin = null)
+    public function renforcer($soin = null)
     {
         if (is_null($soin)) {
-            $this->hp = 100;
+            $this->pv = 100;
         } else {
-            $this->hp += $soin;
-            return 'Vos point de vie son de ' . $this->hp;
+            $this->pv += $soin;
+            return 'Vos point de vie son de ' . $this->pv;
         }
-
     }
 
+    public function tirer(Country $perso)
+    {
+        $perso->pv -= $this->attaque;
+    }
+    
     public function is_alive()
     {
         // if ($this->hp <=0 ) {
@@ -54,12 +53,7 @@ class Country
         // }else {
         //     return $this->nom.' a '.$this->hp .'PV';
         // }
-        return $this->hp <= 0;
-    }
-
-    public function tirer(Country $perso)
-    {
-        $perso->hp -= $this->atk;
+        return $this->pv <= 0;
     }
 
     //Constante
@@ -77,7 +71,7 @@ class Country
 
     public function getHp()
     {
-        return $this->hp;
+        return $this->pv;
     }
     public function getId()
     {
@@ -85,7 +79,7 @@ class Country
     }
     public function getAtk()
     {
-        return $this->atk;
+        return $this->attaque;
     }
     public function getNom()
     {
@@ -98,20 +92,20 @@ class Country
 
     // SETTERS
 
-    public function setHp($hp)
+    public function setHp($pv)
     {
-        $this->hp = $hp;
-        if ($hp < 0) {
-            $this->hp = 0;
+        $this->pv = $pv;
+        if ($pv < 0) {
+            $this->pv = 0;
         }
-        if ($hp > self::MAXHP) {
-            $this->hp = self::MAXHP;
+        if ($pv > self::MAXHP) {
+            $this->pv = self::MAXHP;
         }
 
     }
-    public function setAtk($atk)
+    public function setAtk($attaque)
     {
-        return $this->atk = $atk;
+        return $this->attaque = $attaque;
     }
     public function setId($id)
     {

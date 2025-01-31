@@ -12,7 +12,10 @@
 </head>
 
 <body>
-
+    <?php     
+    $countryManager = new CountryManager($db);
+    $countryNames = $countryManager->getAllCountries(); 
+    ?>
     <?php require_once __DIR__ . '/../Class/CountryManager.php'; ?>
     <div class="home-container">
         <div class="top">
@@ -29,6 +32,7 @@
                     <div class="interaction-container">
                         <div class="img-container">
                             <!-- ICI APPELER L'IMG DE LA BDD - PAR DÉFAUT USA -->
+                            <img src="https://flagcdn.com/w320/us.png" alt="">
                          </div>
                         <div class="select-details">
                             <form action="index.php?action=country1" method="POST">
@@ -36,7 +40,8 @@
                                 <select name="nom" id="select-pays1" onchange="this.form.submit()">
                                     <option value="">Change Country</option>
                                     <?php foreach ($countryNames as $country): ?>
-                                        <option value="<?= htmlspecialchars($country->getNom()) ?>">
+                                        <option value="<?= htmlspecialchars($country->getNom()) ?>" 
+                                            <?= ($player1 && $player1->getNom() === $country->getNom()) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($country->getNom()) ?>
                                         </option>
                                     <?php endforeach; ?>
@@ -55,14 +60,15 @@
                     <div class="interaction-container">
                         <div class="img-container">
                             <!-- ICI APPELER L'IMG DE LA BDD - PAR DÉFAUT USA -->
-                            <img src="<?php echo $country->getImg(); ?>" alt="Image de <?php echo $country->getNom(); ?>">                        </div>
+                            <img src="https://flagcdn.com/w320/us.png" alt="">
                         <div class="select-details">
                             <form action="index.php?action=country2" method="POST">
                                 <label for="nom"></label>
                                 <select name="nom" id="select-pays2" onchange="this.form.submit()">
                                     <option value="">Change Country</option>
                                     <?php foreach ($countryNames as $country): ?>
-                                        <option value="<?= htmlspecialchars($country->getNom()) ?>">
+                                        <option value="<?= htmlspecialchars($country->getNom()) ?>" 
+                                            <?= ($player2 && $player2->getNom() === $country->getNom()) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($country->getNom()) ?>
                                         </option>
                                     <?php endforeach; ?>
@@ -75,7 +81,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>  
     </div>
 </body>
 
