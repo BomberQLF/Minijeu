@@ -12,7 +12,15 @@ body {
   background-color: #202c36;
   color: white;
 }
-
+.add-country {
+  font-size: 2rem;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+.add-country:hover {
+  cursor: pointer;
+}
 .upper-container {
   padding: 6rem 4rem;
 }
@@ -24,12 +32,18 @@ body {
   font-family: "Luckiest Guy", serif;
   padding: 1rem;
   background: none;
-  border-radius: 14px;
+  border-radius: 32px;
   margin-top: 1rem;
   color: white;
   border: 1px solid white;
   font-size: 1rem;
   -webkit-appearance: none;
+}
+.home-container {
+  height: 100vh;
+  display: flex
+;
+  flex-direction: column;
 }
 #select-pays2 {
   font-family: "Luckiest Guy", serif;
@@ -55,7 +69,11 @@ body {
   width: fit-content;
   font-size: 1rem;
 }
-
+.middle {
+  display: flex;
+  flex-direction: column;
+  gap: 12rem;
+}
 .middle-container {
   display: flex;
   align-items: center;

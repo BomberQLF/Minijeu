@@ -26,20 +26,12 @@ class CountryManager
         return $countries;
     }
 
-    public function getCountryByName($name)
-    {
-        $requete = 'SELECT * FROM pays WHERE nom = :nom';
-        $stmt = $this->db->prepare($requete);
-        $stmt->bindParam(':nom', $name, PDO::PARAM_STR);
-        $stmt->execute();
+    public function getCountryByName(string $nom): ?Country {
+        $query = $this->db->prepare("SELECT id, nom, attaque, renforcement, bombe_nucleaire, pv, image FROM pays WHERE nom = :nom");
+        $query->execute(['nom' => $nom]);
+        $data = $query->fetch(PDO::FETCH_ASSOC);
     
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        if ($result) {
-            return new Country($result);
-        } else {
-            return null;
-        }
+        return ($data) ? new Country($data) : null;
     }
 
     // Fonction save country to player session

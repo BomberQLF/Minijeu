@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./Style/style.css">
+    <script src="index.js"></script>
     <title>Battle Of Nations</title>
 </head>
 
@@ -82,6 +83,32 @@
                 </div>
             </div>
         </div>  
+        <div class="bottom-container">
+            <span class="add-country">Add a country</span>
+            <div class="add-country-container" style="display: none;">
+            <form style="padding:3rem;" action="index.php?action=addCountry" method="POST" enctype="multipart/form-data">
+                <label for="nom">Nom</label>
+                <input type="text" name="nom" id="nom">
+
+                <label for="attaque">Invade</label>
+                <input type="number" name="attaque" id="attaque" max="100">
+
+                <label for="renforcement">Reinforcement</label>
+                <input type="number" name="renforcement" id="renforcement" max="50">
+
+                <label for="bombe_nucleaire">Nuclear Bomb</label>
+                <input type="number" name="bombe_nucleaire" id="bombe_nucleaire" max="10">
+
+                <label for="pv">PV</label>
+                <input type="number" name="pv" id="pv" max="1000">
+
+                <label for="image">Image</label>
+                <input type="file" name="image" id="image">
+
+                <button type="submit">ADD</button>
+            </form>
+            </div>
+        </div>
     </div>
 </body>
 
