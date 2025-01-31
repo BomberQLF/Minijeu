@@ -1,11 +1,12 @@
 <?php
 
-class Personnage
+class Country
 {
     private int $id = 0;
     private string $nom = "";
     private int $hp = 0;
     private int $atk = 0;
+    private ?string $image = null;
     public const MAXHP = 100;
     private static $compteur = 0;
 
@@ -56,7 +57,7 @@ class Personnage
         return $this->hp <= 0;
     }
 
-    public function tirer(Personnage $perso)
+    public function tirer(Country $perso)
     {
         $perso->hp -= $this->atk;
     }
@@ -90,6 +91,10 @@ class Personnage
     {
         return $this->nom;
     }
+    public function getImg(): string
+    {
+        return $this->image ?: "https://via.placeholder.com/150";
+    }
 
     // SETTERS
 
@@ -115,6 +120,9 @@ class Personnage
     public function setNom($nom)
     {
         return $this->nom = $nom;
+    }
+    public function setImg(?string $img): void {
+        $this->img = $img;
     }
 
 }

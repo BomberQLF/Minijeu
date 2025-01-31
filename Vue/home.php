@@ -12,6 +12,8 @@
 </head>
 
 <body>
+
+    <?php require_once __DIR__ . '/../Class/CountryManager.php'; ?>
     <div class="home-container">
         <div class="top">
             <div class="upper-container">
@@ -27,15 +29,17 @@
                     <div class="interaction-container">
                         <div class="img-container">
                             <!-- ICI APPELER L'IMG DE LA BDD - PAR DÉFAUT USA -->
-                            <img src="https://flagcdn.com/w320/us.png" alt="">
-                        </div>
+                         </div>
                         <div class="select-details">
-                            <form action="" method="POST">
+                            <form action="index.php?action=country1" method="POST">
                                 <label for="nom"></label>
                                 <select name="nom" id="select-pays1" onchange="this.form.submit()">
-                                <!-- BOUCLER ICI -->
                                     <option value="">Change Country</option>
-                                    <option value="USA">USA</option>
+                                    <?php foreach ($countryNames as $country): ?>
+                                        <option value="<?= htmlspecialchars($country->getNom()) ?>">
+                                            <?= htmlspecialchars($country->getNom()) ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </form>
                             <div class="stats-container">
@@ -51,15 +55,17 @@
                     <div class="interaction-container">
                         <div class="img-container">
                             <!-- ICI APPELER L'IMG DE LA BDD - PAR DÉFAUT USA -->
-                            <img src="https://flagcdn.com/w320/us.png" alt="">
-                        </div>
+                            <img src="<?php echo $country->getImg(); ?>" alt="Image de <?php echo $country->getNom(); ?>">                        </div>
                         <div class="select-details">
-                            <form action="" method="POST">
+                            <form action="index.php?action=country2" method="POST">
                                 <label for="nom"></label>
-                                <select name="nom" id="select-pays1" onchange="this.form.submit()">
-                                <!-- BOUCLER ICI -->
+                                <select name="nom" id="select-pays2" onchange="this.form.submit()">
                                     <option value="">Change Country</option>
-                                    <option value="USA">USA</option>
+                                    <?php foreach ($countryNames as $country): ?>
+                                        <option value="<?= htmlspecialchars($country->getNom()) ?>">
+                                            <?= htmlspecialchars($country->getNom()) ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </form>
                             <div class="stats-container">

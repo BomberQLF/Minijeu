@@ -1,5 +1,5 @@
 <?php
-class PersonnageManager
+class CountryManager
 {
     private $db;
     public function __construct($db)
@@ -12,36 +12,45 @@ class PersonnageManager
         $this->db = $db;
     }
 
-    public function getAllPersonnages(): array
+    public function getAllCountries(): array
     {
-        $requete = 'SELECT * FROM blinde ORDER BY nom';
+        $requete = 'SELECT id, nom, image FROM pays ORDER BY nom'; 
         $stmt = $this->db->query($requete);
-
-        while ($perso = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $personnages[] = new Personnage($perso);
+    
+        $countries = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $countries[] = new Country($row);
         }
-        return $personnages;
+    
+        return $countries;
     }
 
-    public function getOnePersonnageById($id): ?Personnage
+    public function getCountryByName($name)
     {
-        $requete = 'SELECT * FROM blinde WHERE id=:id';
+        $requete = 'SELECT * FROM pays WHERE nom = :nom';
         $stmt = $this->db->prepare($requete);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':nom', $name, PDO::PARAM_STR);
         $stmt->execute();
-
+    
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
         if ($result) {
-            // Créer un personnage avec les données récupérées
-            $personnage = new Personnage($result);
-            return $personnage;
+            return new Country($result);
         } else {
             return null;
         }
     }
 
-    public function createTank($nom, $atk, $pv, $armor)
+    public function saveCountryToPlayer($player, $country)
+{
+    if ($player == 'player1') {
+        $_SESSION['player1'] = $country;
+    } elseif ($player == 'player2') {
+        $_SESSION['player2'] = $country;
+    }
+}
+
+    public function createCountry($nom, $atk, $pv, $armor)
     {
         $requete = "INSERT INTO blinde (nom, atk, pv, armor) VALUES (:nom, :atk, :pv, :armor)";
         $stmt = $this->db->prepare($requete);
