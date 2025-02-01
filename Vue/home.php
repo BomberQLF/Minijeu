@@ -33,7 +33,7 @@
                     <div class="interaction-container">
                         <div class="img-container">
                             <!-- ICI APPELER L'IMG DE LA BDD - PAR DÉFAUT USA -->
-                            <img src="https://flagcdn.com/w320/us.png" alt="">
+                            <img src="<?php echo $player1->getImage(); ?>" alt="">
                          </div>
                         <div class="select-details">
                             <form action="index.php?action=country1" method="POST">
@@ -61,7 +61,7 @@
                     <div class="interaction-container">
                         <div class="img-container">
                             <!-- ICI APPELER L'IMG DE LA BDD - PAR DÉFAUT USA -->
-                            <img src="https://flagcdn.com/w320/us.png" alt="">
+                            <img src="<?php echo $player2->getImage(); ?>" alt="">
                         <div class="select-details">
                             <form action="index.php?action=country2" method="POST">
                                 <label for="nom"></label>
