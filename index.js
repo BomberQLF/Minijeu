@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (addCountry && addContainer) {
         addCountry.addEventListener('click', () => {
-            // Vérifier et alterner la visibilité
             if (addContainer.style.display === 'none' || addContainer.style.display === '') {
                 addContainer.style.display = 'block';
                 addCountry.style.display = 'none';
@@ -15,4 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error("Élément non trouvé !");
     }
+
+    document.querySelectorAll('.stats-container').forEach(container => {
+        container.addEventListener('click', () => {
+            const statsDetails = container.nextElementSibling;
+            if (statsDetails && statsDetails.classList.contains('stats-details')) {
+                statsDetails.style.display = statsDetails.style.display === "block" ? "none" : "block";
+            }
+        });
+    });
 });

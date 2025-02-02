@@ -104,11 +104,16 @@ switch ($action) {
             echo "Invalid request method.";
         }
         break;
+
+    case 'play' : 
+        include('./Vue/battle.php');
+        break;
 }
 
 // Récupération des pays sélectionnés 
 $player1 = (isset($_SESSION['player1']) && is_string($_SESSION['player1'])) ? unserialize($_SESSION['player1']) : null;
 $player2 = (isset($_SESSION['player2']) && is_string($_SESSION['player2'])) ? unserialize($_SESSION['player2']) : null;
+
 
 // VARIABLES GLOBALES POUR MANIPULER LES DONNÉES DES PAYS
 $reinforcement1 = ($player1) ? $player1->getRenforcement() : null;

@@ -22,8 +22,7 @@
         <div class="top">
             <div class="upper-container">
                 <div class="title">
-                    Battle Of Nations
-                    <div class="lower-title">2 Player Game!</div>
+                    TEST
                 </div>
             </div>
         </div>

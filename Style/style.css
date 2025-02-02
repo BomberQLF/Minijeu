@@ -32,7 +32,6 @@ body {
   font-family: "Luckiest Guy", serif;
   padding: 1rem;
   background: none;
-  border-radius: 32px;
   margin-top: 1rem;
   color: white;
   border: 1px solid white;
@@ -49,7 +48,6 @@ body {
   font-family: "Luckiest Guy", serif;
   padding: 1rem;
   background: none;
-  border-radius: 14px;
   margin-top: 1rem;
   color: white;
   border: 1px solid white;
@@ -64,7 +62,6 @@ body {
 .stats-container {
   padding: 1em;
   background: none;
-  border-radius: 14px;
   border: 1px solid white;
   width: fit-content;
   font-size: 1rem;
@@ -103,4 +100,28 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+.stats-details {
+  position: absolute;
+}
+
+/* #stats1 {
+  right: 100px;
+} */
+
+/* #stats2 */
+.ready > a {
+  position: relative;
+  top: 140px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid white;
+  text-decoration: none;
+  color: white;
+}
+
+.vs {
+  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
