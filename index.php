@@ -17,7 +17,6 @@ spl_autoload_register('chargerClasse');
 if (!isset($_SESSION['player1'])) {
     $_SESSION['player1'] = null;
 }
-
 if (!isset($_SESSION['player2'])) {
     $_SESSION['player2'] = null;
 }
@@ -33,11 +32,19 @@ $manager = new CountryManager($db);
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
+    case 'play':
+        $player1 = (isset($_SESSION['player1']) && is_string($_SESSION['player1'])) ? unserialize($_SESSION['player1']) : null;
+        $player2 = (isset($_SESSION['player2']) && is_string($_SESSION['player2'])) ? unserialize($_SESSION['player2']) : null;
+        include('./Vue/battle.php');
+        exit;
+        
     case 'country1':
         if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['nom'])) {
             $selectedCountry = $manager->getCountryByName($_POST['nom']);
             if ($selectedCountry) {
                 $_SESSION['player1'] = serialize($selectedCountry);
+                header("Location: index.php");
+                exit;
             }
         }
         break;
@@ -47,6 +54,8 @@ switch ($action) {
             $selectedCountry = $manager->getCountryByName($_POST['nom']);
             if ($selectedCountry) {
                 $_SESSION['player2'] = serialize($selectedCountry);
+                header("Location: index.php");
+                exit;
             }
         }
         break;
@@ -69,9 +78,6 @@ switch ($action) {
                 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                     $fileTmpPath = $_FILES['image']['tmp_name'];
                     $fileName = $_FILES['image']['name'];
-                    $fileSize = $_FILES['image']['size'];
-                    $fileType = $_FILES['image']['type'];
-
                     $uploadDir = 'uploads/';
 
                     if (!is_dir($uploadDir)) {
@@ -79,7 +85,6 @@ switch ($action) {
                     }
 
                     $fileNameNew = uniqid("{$_POST['nom']}_", true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
-
                     $destPath = $uploadDir . $fileNameNew;
                     if (move_uploaded_file($fileTmpPath, $destPath)) {
                         $imagePath = $destPath;
@@ -108,10 +113,6 @@ switch ($action) {
             echo "Invalid request method.";
         }
         break;
-
-    case 'play' : 
-        include('./Vue/battle.php');
-        exit;
 }
 
 // VARIABLES GLOBALES POUR MANIPULER LES DONNÉES DES PAYS
@@ -135,5 +136,4 @@ $countryNames = $manager->getAllCountries();
 
 // Affichage de la vue
 include("./Vue/home.php");
-
 ?>
