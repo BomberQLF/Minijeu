@@ -22,6 +22,10 @@ if (!isset($_SESSION['player2'])) {
     $_SESSION['player2'] = null;
 }
 
+// Récupération des pays sélectionnés 
+$player1 = (isset($_SESSION['player1']) && is_string($_SESSION['player1'])) ? unserialize($_SESSION['player1']) : null;
+$player2 = (isset($_SESSION['player2']) && is_string($_SESSION['player2'])) ? unserialize($_SESSION['player2']) : null;
+
 // Gestionnaire de pays
 $manager = new CountryManager($db);
 
@@ -107,13 +111,8 @@ switch ($action) {
 
     case 'play' : 
         include('./Vue/battle.php');
-        break;
+        exit;
 }
-
-// Récupération des pays sélectionnés 
-$player1 = (isset($_SESSION['player1']) && is_string($_SESSION['player1'])) ? unserialize($_SESSION['player1']) : null;
-$player2 = (isset($_SESSION['player2']) && is_string($_SESSION['player2'])) ? unserialize($_SESSION['player2']) : null;
-
 
 // VARIABLES GLOBALES POUR MANIPULER LES DONNÉES DES PAYS
 $reinforcement1 = ($player1) ? $player1->getRenforcement() : null;
@@ -136,4 +135,5 @@ $countryNames = $manager->getAllCountries();
 
 // Affichage de la vue
 include("./Vue/home.php");
+
 ?>

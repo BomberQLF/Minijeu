@@ -23,6 +23,7 @@
             <div class="upper-container">
                 <div class="title">
                     TEST
+                    <?php var_dump($player1->getAttaque()) ?>
                 </div>
             </div>
         </div>
