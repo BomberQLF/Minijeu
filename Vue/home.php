@@ -102,6 +102,9 @@
         </div>
       </div>
     </div>  
+    <div class="backoffice-link" style="position: absolute; top: 20px; right: 20px; font-size: 2rem;">
+        <a href="index.php?action=backoffice" style="text-decoration: none; color: white;">Backoffice</a>
+    </div>
     <div class="bottom-container">
       <span class="add-country">Add a country</span>
       <div class="add-country-container" style="display: none;">

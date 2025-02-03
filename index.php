@@ -210,9 +210,53 @@ switch ($action) {
         include('./Vue/battle.php');
         exit;
 
+    case 'backoffice':
+        include('./Vue/backoffice.php');
+        exit;
+
+    case 'deleteCountry':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+            $manager->deleteCountry($_POST['id']);
+            header("Location: index.php?action=backoffice");
+            exit;
+        }
+        break;
+
+    case 'editCountry':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['nom'], $_POST['attaque'], $_POST['renforcement'], $_POST['bombe_nucleaire'], $_POST['pv'])) {
+            $imagePath = '';
+
+            // Check if an image was uploaded
+            if (isset($_FILES['image_upload']) && $_FILES['image_upload']['error'] === UPLOAD_ERR_OK) {
+                $imageTmpPath = $_FILES['image_upload']['tmp_name'];
+                $imageName = basename($_FILES['image_upload']['name']);
+                $imagePath = 'uploads/' . $imageName;
+
+                // Move the uploaded file to the 'uploads' directory
+                if (!move_uploaded_file($imageTmpPath, $imagePath)) {
+                    // Handle upload error
+                    echo "Erreur de téléchargement de l'image.";
+                    exit;
+                }
+            } elseif (!empty($_POST['image_url'])) {
+                // If no file uploaded, use the provided image URL
+                $imagePath = $_POST['image_url'];
+            }
+
+            // Update country data with image URL or file path
+            $manager->updateCountry($_POST['id'], $_POST['nom'], $_POST['attaque'], $_POST['renforcement'], $_POST['bombe_nucleaire'], $_POST['pv'], $imagePath);
+            header("Location: index.php?action=backoffice");
+            exit;
+        } elseif (isset($_GET['id'])) {
+            $country = $manager->getCountryByName($_GET['id']);
+            include('./Vue/edit_country.php');
+            exit;
+        }
+        break;
+
     case 'reset':
         unset($_SESSION['player1'], $_SESSION['player2'], $_SESSION['pv1'], $_SESSION['pv2'], $_SESSION['winner']);
-        header("Location: index.php");
+        include('Vue/home.php');
         exit;
 }
 
