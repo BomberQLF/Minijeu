@@ -33,7 +33,7 @@
           <div class="interaction-container">
             <div class="img-container">
               <!-- On affiche une image par défaut si player1 n'est pas défini -->
-              <img src="<?php echo $player1 ? $player1->getImage() : 'default.png'; ?>" alt="">
+              <img style="height: 213px; width: 320px;" src="<?php echo $player1 ? $player1->getImage() : 'default.png'; ?>" alt="">
             </div>
             <div class="select-details">
               <form action="index.php?action=country1" method="POST">
@@ -72,7 +72,7 @@
         <div class="player2">
           <div class="interaction-container">
             <div class="img-container">
-              <img src="<?php echo $player2 ? $player2->getImage() : 'default.png'; ?>" alt="">
+              <img style="height: 213px; width: 320px;" src="<?php echo $player2 ? $player2->getImage() : 'default.png'; ?>" alt="">
             </div>
             <div class="select-details">
               <form action="index.php?action=country2" method="POST">
@@ -108,21 +108,28 @@
     <div class="bottom-container">
       <span class="add-country">Add a country</span>
       <div class="add-country-container" style="display: none;">
-        <form style="padding:3rem;" action="index.php?action=addCountry" method="POST" enctype="multipart/form-data">
-          <label for="nom">Nom</label>
-          <input type="text" name="nom" id="nom">
-          <label for="attaque">Invade</label>
-          <input type="number" name="attaque" id="attaque" max="100">
-          <label for="renforcement">Reinforcement</label>
-          <input type="number" name="renforcement" id="renforcement" max="50">
-          <label for="bombe_nucleaire">Nuclear Bomb</label>
-          <input type="number" name="bombe_nucleaire" id="bombe_nucleaire" max="10">
-          <label for="pv">PV</label>
-          <input type="number" name="pv" id="pv" max="1000">
-          <label for="image">Image</label>
-          <input type="file" name="image" id="image">
-          <button type="submit">ADD</button>
-        </form>
+      <form style="padding:3rem;" action="index.php?action=addCountry" method="POST" enctype="multipart/form-data">
+        <label for="nom">Nom</label>
+        <input type="text" name="nom" id="nom">
+        
+        <label for="attaque">Invade</label>
+        <input type="number" name="attaque" id="attaque" max="100" min="0">
+        
+        <label for="renforcement">Reinforcement</label>
+        <input type="number" name="renforcement" id="renforcement" max="50" min="0">
+        
+        <label for="bombe_nucleaire">Nuclear Bomb</label>
+        <input type="number" name="bombe_nucleaire" id="bombe_nucleaire" max="10" min="0">
+        
+        <label for="pv">PV</label>
+        <input type="number" name="pv" id="pv" max="1000" min="0">
+        
+        <label for="image">Image</label>
+        <input type="file" name="image" id="image">
+        
+        <button type="submit">ADD</button>
+    </form>
+
       </div>
     </div>
   </div>

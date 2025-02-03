@@ -101,8 +101,17 @@ body {
   align-items: center;
   justify-content: space-evenly;
 }
-.stats-details {
+#stats1 {
   position: absolute;
+  display: block;
+  right: 55rem;
+  bottom: 10rem;
+}
+#stats2 {
+  position: absolute;
+  display: block;
+  right: 14rem;
+  bottom: 10rem;
 }
 .ready > a {
   position: relative;

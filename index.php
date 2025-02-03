@@ -116,9 +116,13 @@ switch ($action) {
                 is_numeric($_POST['attaque']) &&
                 is_numeric($_POST['renforcement']) &&
                 is_numeric($_POST['bombe_nucleaire']) &&
-                is_numeric($_POST['pv'])
+                is_numeric($_POST['pv']) &&
+                $_POST['attaque'] >= 0 &&
+                $_POST['renforcement'] >= 0 &&
+                $_POST['bombe_nucleaire'] >= 0 &&
+                $_POST['pv'] >= 0
             ) {
-
+                // File upload handling
                 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                     $fileTmpPath = $_FILES['image']['tmp_name'];
                     $fileName = $_FILES['image']['name'];
@@ -140,7 +144,6 @@ switch ($action) {
                     $imagePath = null;
                 }
 
-                // Appel de la méthode pour ajouter le pays
                 $manager->createCountry(
                     $_POST['nom'],
                     $_POST['attaque'],
@@ -151,12 +154,13 @@ switch ($action) {
                 );
                 echo "Country Added";
             } else {
-                echo "Please fill in all fields correctly.";
+                echo "Please fill in all fields correctly and ensure no negative values.";
             }
         } else {
             echo "Invalid request method.";
         }
         break;
+
 
     case 'bombe_nucleaire':
         $target = $_GET['target'] ?? null;
