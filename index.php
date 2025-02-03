@@ -13,17 +13,53 @@ function chargerClasse($classe)
 }
 spl_autoload_register('chargerClasse');
 
-// Vérification des joueurs en session
-if (!isset($_SESSION['player1'])) {
-    $_SESSION['player1'] = null;
-}
-if (!isset($_SESSION['player2'])) {
-    $_SESSION['player2'] = null;
+// Je n'arrivais pas à fix un bug qui empêchait la sélection des pays pour les deux joueurs après avoir reset la session (après une partie gagnée)
+if (!isset($_SESSION['player1']) || is_null($_SESSION['player1'])) {
+    $data1 = [
+        'id' => 1,
+        'nom' => 'France',
+        'attaque' => 50,
+        'renforcement' => 20,
+        'bombe_nucleaire' => 1,
+        'pv' => 1000,
+        'image' => 'https://flagcdn.com/w320/fr.png'
+    ];
+    $player1 = new Country($data1);
+    $_SESSION['player1'] = serialize($player1);
+} else {
+    $player1 = (is_string($_SESSION['player1'])) ? unserialize($_SESSION['player1']) : null;
 }
 
-// Récupération des pays sélectionnés 
-$player1 = (isset($_SESSION['player1']) && is_string($_SESSION['player1'])) ? unserialize($_SESSION['player1']) : null;
-$player2 = (isset($_SESSION['player2']) && is_string($_SESSION['player2'])) ? unserialize($_SESSION['player2']) : null;
+if (!isset($_SESSION['player2']) || is_null($_SESSION['player2'])) {
+    $data2 = [
+        'id' => 2,
+        'nom' => 'Russie',
+        'attaque' => 45,
+        'renforcement' => 35,
+        'bombe_nucleaire' => 1,
+        'pv' => 1000,
+        'image' => 'https://flagcdn.com/w320/ru.png'
+    ];
+    $player2 = new Country($data2);
+    $_SESSION['player2'] = serialize($player2);
+} else {
+    $player2 = (is_string($_SESSION['player2'])) ? unserialize($_SESSION['player2']) : null;
+}
+
+if ($player1 && !isset($_SESSION['pv1'])) {
+    $_SESSION['pv1'] = $player1->getPv();
+}
+if ($player2 && !isset($_SESSION['pv2'])) {
+    $_SESSION['pv2'] = $player2->getPv();
+}
+
+if ($player1 && $player2) {
+    if ($player1->getPv() <= 0) {
+        $_SESSION['winner'] = "Le gagnant est " . $player2->getNom();
+    } elseif ($player2->getPv() <= 0) {
+        $_SESSION['winner'] = "Le gagnant est " . $player1->getNom();
+    }
+}
 
 // Gestionnaire de pays
 $manager = new CountryManager($db);
@@ -33,8 +69,13 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
     case 'play':
+        // Recalculer player1 et player2 depuis la session
         $player1 = (isset($_SESSION['player1']) && is_string($_SESSION['player1'])) ? unserialize($_SESSION['player1']) : null;
         $player2 = (isset($_SESSION['player2']) && is_string($_SESSION['player2'])) ? unserialize($_SESSION['player2']) : null;
+        if (!$player1 || !$player2) {
+            header("Location: index.php");
+            exit;
+        }
         include('./Vue/battle.php');
         exit;
 
@@ -43,6 +84,8 @@ switch ($action) {
             $selectedCountry = $manager->getCountryByName($_POST['nom']);
             if ($selectedCountry) {
                 $_SESSION['player1'] = serialize($selectedCountry);
+                // Réinitialiser le pv associé au nouveau pays
+                $_SESSION['pv1'] = $selectedCountry->getPv();
                 header("Location: index.php");
                 exit;
             }
@@ -54,6 +97,7 @@ switch ($action) {
             $selectedCountry = $manager->getCountryByName($_POST['nom']);
             if ($selectedCountry) {
                 $_SESSION['player2'] = serialize($selectedCountry);
+                $_SESSION['pv2'] = $selectedCountry->getPv();
                 header("Location: index.php");
                 exit;
             }
@@ -115,52 +159,64 @@ switch ($action) {
         break;
 
     case 'bombe_nucleaire':
-        isset($_GET['target']) ? $target = $_GET['target'] : $target = null;
-        if ($target === 'player1') {
-            if ($player1->getPv() > 0) {
-                $player1->setPv($player1->getPv() - 100);
-                $player2->setBombe_nucleaire($player2->getBombe_nucleaire() - 1);
-            }
-        } elseif ($target === 'player2') {
-            if ($player2->getPv() > 0) {
-                $player2->setPv($player2->getPv() - 100);
-                $player1->setBombe_nucleaire($player1->getBombe_nucleaire() - 1);
-            }
+        $target = $_GET['target'] ?? null;
+        if ($target === 'player1' && $player2) {
+            $player2->nuclearBomb($player1);
+            $_SESSION['pv1'] = $player1->getPv();
+            $_SESSION['nuclearBombs2'] = $player2->getBombe_nucleaire() - 1;
+        } elseif ($target === 'player2' && $player1) {
+            $player1->nuclearBomb($player2);
+            $_SESSION['pv2'] = $player2->getPv();
+            $_SESSION['nuclearBombs1'] = $player1->getBombe_nucleaire() - 1;
         }
+        // Sauvegarder les objets mis à jour dans la session
+        $_SESSION['player1'] = serialize($player1);
+        $_SESSION['player2'] = serialize($player2);
         include('./Vue/battle.php');
-        break;
+        exit;
 
     case 'attaque':
-        isset($_GET['target']) ? $target = $_GET['target'] : $target = null;
-        if ($target === 'player1') {
-            if ($player1->getPv() > 0) {
-                $player1->setPv($player1->getPv() - $player2->getAttaque());
+        $target = $_GET['target'] ?? null;
+        if ($target === 'player1' && $player2) {
+            $player2->invade($player1);
+            $_SESSION['pv1'] = $player1->getPv();
+        } elseif ($target === 'player2' && $player1) {
+            $player1->invade($player2);
+            $_SESSION['pv2'] = $player2->getPv();
+        }
+        if ($player1 && $player2) {
+            if ($player1->getPv() <= 0) {
+                $_SESSION['winner'] = "Le gagnant est " . $player2->getNom();
+            } elseif ($player2->getPv() <= 0) {
+                $_SESSION['winner'] = "Le gagnant est " . $player1->getNom();
             }
         }
-        if ($target === 'player2') {
-            if ($player2->getPv() > 0) {
-                $player2->setPv($player2->getPv() - $player1->getAttaque());
-            }
-        }
+        $_SESSION['player1'] = serialize($player1);
+        $_SESSION['player2'] = serialize($player2);
         include('./Vue/battle.php');
-        break;
+        exit;
 
     case 'renforcer':
-        isset($_GET['target']) ? $target = $_GET['target'] : $target = null;
-            if ($_GET['target'] === 'player1') {
-                if ($player1->getPv() > 0) {
-                    $player1->setPv($player1->getPv() + $player1->getRenforcement());
-                }
-            } elseif ($_GET['target'] === 'player2') {
-                if ($player2->getPv() > 0) {
-                    $player2->setPv($player2->getPv() + $player2->getRenforcement());
-                }
-            }
+        $target = $_GET['target'] ?? null;
+        if ($target === 'player1' && $player1) {
+            $player1->reinforce($player1);
+            $_SESSION['pv1'] = $player1->getPv();
+        } elseif ($target === 'player2' && $player2) {
+            $player2->reinforce($player2);
+            $_SESSION['pv2'] = $player2->getPv();
+        }
+        $_SESSION['player1'] = serialize($player1);
+        $_SESSION['player2'] = serialize($player2);
         include('./Vue/battle.php');
-        break;
+        exit;
+
+    case 'reset':
+        unset($_SESSION['player1'], $_SESSION['player2'], $_SESSION['pv1'], $_SESSION['pv2'], $_SESSION['winner']);
+        header("Location: index.php");
+        exit;
 }
 
-// VARIABLES GLOBALES POUR MANIPULER LES DONNÉES DES PAYS
+// VARIABLES GLOBALES POUR MANIPULER LES DONNÉES DES PAYS (si les objets existent)
 $reinforcement1 = ($player1) ? $player1->getRenforcement() : null;
 $reinforcement2 = ($player2) ? $player2->getRenforcement() : null;
 
@@ -179,6 +235,6 @@ $image2 = ($player2) ? $player2->getImage() : null;
 // Liste des pays disponibles
 $countryNames = $manager->getAllCountries();
 
-// Affichage de la vue
+// Affichage de la vue (par exemple home.php)
 include("./Vue/home.php");
 ?>

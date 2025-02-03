@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,18 +11,24 @@
   <script src="index.js"></script>
   <title>Battle Of Nations</title>
 </head>
+
 <body>
-<?php require_once __DIR__ . '/../Class/CountryManager.php'; ?>
-  <?php     
-    $countryManager = new CountryManager($db);
-    $countryNames = $countryManager->getAllCountries(); 
+<?php 
+require_once __DIR__ . '/../Class/CountryManager.php';
+  $countryManager = new CountryManager($db);
+  $countryNames = $countryManager->getAllCountries();
   ?>
   <div class="home-container">
     <div class="top">
       <div class="upper-container">
         <div class="title">
-          TEST
-          <?php var_dump($player1->getAttaque()) ?>
+          <div class="subtitle">
+            <?php if (isset($_SESSION['winner'])): ?>
+              <h2><?php echo $_SESSION['winner']; ?></h2>
+              <a href="index.php?action=reset">Rejouer</a>
+            <?php endif; ?>
+          </div>
+          <?php echo $player1->getNom() . ' VS ' . $player2->getNom(); ?>
         </div>
       </div>
     </div>
@@ -35,7 +42,9 @@
             </div>
             <div class="menu-battle">
               <div class="health-bar">
-              <div class="health">Health : <span class="health-nbr"><?= $player1->getPv(); ?></span></div>
+                <div class="health">Health :
+                  <span class="health-nbr"><?= $_SESSION['pv1'] ?? 0; ?></span>
+                </div>
               </div>
               <div class="attack-bar">
                 <a href="index.php?action=attaque&target=player1">Invade</a>
@@ -62,7 +71,9 @@
             </div>
             <div class="menu-battle">
               <div class="health-bar">
-                <div class="health">Health : <span class="health-nbr"><?= $player2->getPv(); ?></span></div>
+                <div class="health">Health :
+                  <span class="health-nbr"><?= $_SESSION['pv2'] ?? 0; ?></span>
+                </div>
               </div>
               <div class="attack-bar">
                 <a href="index.php?action=attaque&target=player2">Invade</a>
@@ -78,7 +89,7 @@
           </div>
         </div>
       </div>
-    </div>  
+    </div>
     <div class="bottom-container">
       <span class="add-country">Add a country</span>
       <div class="add-country-container" style="display: none;">
@@ -107,4 +118,5 @@
     </div>
   </div>
 </body>
+
 </html>

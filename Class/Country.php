@@ -2,7 +2,7 @@
 
 class Country
 {
-    public const MAXHP = 100;
+    public const MAXHP = 1000;
     private static $compteur = 0;
 
     private int $id;
@@ -13,7 +13,6 @@ class Country
     private int $pv = 1000;
     private ?string $image = null;
 
-
     private function hydrate(array $donnees)
     {
         foreach ($donnees as $key => $value) {
@@ -23,6 +22,7 @@ class Country
             }
         }
     }
+
     public function __construct(array $donnees)
     {
         $this->hydrate($donnees);
@@ -83,7 +83,14 @@ class Country
     }
     public function setPv(?int $pv)
     {
-        $this->pv = $pv;
+        // On s'assure que les points de vie restent entre 0 et MAXHP
+        if ($pv > self::MAXHP) {
+            $this->pv = self::MAXHP;
+        } elseif ($pv < 0) {
+            $this->pv = 0;
+        } else {
+            $this->pv = $pv;
+        }
     }
     public function setImage(?string $image)
     {
@@ -92,16 +99,25 @@ class Country
 
     // METHODS
 
-    public function invade(Country $country) {
-        $country->setPv($country->getPv() - $this->attaque);
+    // Infliger des dégâts à un autre pays, en s'assurant que le PV ne descende pas en dessous de 0
+    public function invade(Country $country)
+    {
+        $newPv = $country->getPv() - $this->attaque;
+        $country->setPv($newPv);
     }
 
-    public function reinforce(Country $country) {
-        $country->setPv($country->getPv() + $this->renforcement);
+    // Renforcer un pays, sans dépasser MAXHP
+    public function reinforce(Country $country)
+    {
+        $newPv = $country->getPv() + $this->renforcement;
+        $country->setPv($newPv);
     }
 
-    public function nuclearBomb(Country $country) {
-        $country->setPv($country->getPv() - 100);
+    // Lancer une bombe nucléaire sur un pays, en s'assurant que le PV ne descende pas en dessous de 0
+    public function nuclearBomb(Country $country)
+    {
+        $newPv = $country->getPv() - 100;
+        $country->setPv($newPv);
     }
 }
 ?>
