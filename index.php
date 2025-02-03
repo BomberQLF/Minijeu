@@ -37,7 +37,7 @@ switch ($action) {
         $player2 = (isset($_SESSION['player2']) && is_string($_SESSION['player2'])) ? unserialize($_SESSION['player2']) : null;
         include('./Vue/battle.php');
         exit;
-        
+
     case 'country1':
         if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['nom'])) {
             $selectedCountry = $manager->getCountryByName($_POST['nom']);
@@ -93,7 +93,7 @@ switch ($action) {
                         exit;
                     }
                 } else {
-                    $imagePath = null; 
+                    $imagePath = null;
                 }
 
                 // Appel de la méthode pour ajouter le pays
@@ -103,7 +103,7 @@ switch ($action) {
                     $_POST['renforcement'],
                     $_POST['bombe_nucleaire'],
                     $_POST['pv'],
-                    $imagePath 
+                    $imagePath
                 );
                 echo "Country Added";
             } else {
@@ -112,6 +112,51 @@ switch ($action) {
         } else {
             echo "Invalid request method.";
         }
+        break;
+
+    case 'bombe_nucleaire':
+        isset($_GET['target']) ? $target = $_GET['target'] : $target = null;
+        if ($target === 'player1') {
+            if ($player1->getPv() > 0) {
+                $player1->setPv($player1->getPv() - 100);
+                $player2->setBombe_nucleaire($player2->getBombe_nucleaire() - 1);
+            }
+        } elseif ($target === 'player2') {
+            if ($player2->getPv() > 0) {
+                $player2->setPv($player2->getPv() - 100);
+                $player1->setBombe_nucleaire($player1->getBombe_nucleaire() - 1);
+            }
+        }
+        include('./Vue/battle.php');
+        break;
+
+    case 'attaque':
+        isset($_GET['target']) ? $target = $_GET['target'] : $target = null;
+        if ($target === 'player1') {
+            if ($player1->getPv() > 0) {
+                $player1->setPv($player1->getPv() - $player2->getAttaque());
+            }
+        }
+        if ($target === 'player2') {
+            if ($player2->getPv() > 0) {
+                $player2->setPv($player2->getPv() - $player1->getAttaque());
+            }
+        }
+        include('./Vue/battle.php');
+        break;
+
+    case 'renforcer':
+        isset($_GET['target']) ? $target = $_GET['target'] : $target = null;
+            if ($_GET['target'] === 'player1') {
+                if ($player1->getPv() > 0) {
+                    $player1->setPv($player1->getPv() + $player1->getRenforcement());
+                }
+            } elseif ($_GET['target'] === 'player2') {
+                if ($player2->getPv() > 0) {
+                    $player2->setPv($player2->getPv() + $player2->getRenforcement());
+                }
+            }
+        include('./Vue/battle.php');
         break;
 }
 

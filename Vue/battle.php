@@ -38,8 +38,8 @@
               <div class="health">Health : <span class="health-nbr"><?= $player1->getPv(); ?></span></div>
               </div>
               <div class="attack-bar">
-                <a href="index.php?action=attaque">Invade</a>
-                <a href="index.php?action=renforcer">Reinforce</a>
+                <a href="index.php?action=attaque&target=player1">Invade</a>
+                <a href="index.php?action=renforcer&target=player1">Reinforce</a>
               </div>
               <!-- Bouton nuclear pour player2 s'il en possède, affiché dans la zone de player1 -->
               <?php if ($player2->getBombe_nucleaire() > 0): ?>
@@ -65,8 +65,8 @@
                 <div class="health">Health : <span class="health-nbr"><?= $player2->getPv(); ?></span></div>
               </div>
               <div class="attack-bar">
-                <a href="index.php?action=attaque">Invade</a>
-                <a href="index.php?action=renforcer">Reinforce</a>
+                <a href="index.php?action=attaque&target=player2">Invade</a>
+                <a href="index.php?action=renforcer&target=player2">Reinforce</a>
               </div>
               <!-- Bouton nuclear pour player1 s'il en possède, affiché dans la zone de player2 -->
               <?php if ($player1->getBombe_nucleaire() > 0): ?>
