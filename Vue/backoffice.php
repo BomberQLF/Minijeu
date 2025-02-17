@@ -58,15 +58,11 @@
                     <td><?= htmlspecialchars($country->getPv()) ?></td>
                     <td><img src="<?= htmlspecialchars($country->getImage()) ?>" width="50" height="50"></td>
                     <td>
-                        <form method="post" style="display:inline;" action="index.php?action=deleteCountry">
-                            <input type="hidden" name="id" value="<?= $country->getId() ?>">
-                            <button type="submit" name="delete">Supprimer</button>
-                        </form>
                         <?php if (!isset($country)) {
                             header("Location: index.php?action=backoffice");
                             exit;
                         } ?>
-                        <form method="post" action="index.php?action=editCountry" enctype="multipart/form-data">
+                        <form method="post" action="index.php?action=editCountry" enctype="multipart/form-data" id="edit-form">
                             <input type="hidden" name="id" value="<?= $country->getId() ?>">
                             <label>Nom : <input type="text" name="nom"
                                     value="<?= htmlspecialchars($country->getNom()) ?>"></label>
@@ -81,7 +77,11 @@
                             <label>Image URL : <input type="text" name="image_url"
                                     value="<?= htmlspecialchars($country->getImage()) ?>"></label>
                             <label>Upload Image: <input type="file" name="image_upload"></label>
-                            <button type="submit">Modifier</button>
+                            <button id="modify" type="submit">Modifier</button>
+                        </form>
+                        <form method="post" style="display:inline;" action="index.php?action=deleteCountry">
+                            <input type="hidden" name="id" value="<?= $country->getId() ?>">
+                            <button id="delete" type="submit" name="delete">Supprimer</button>
                         </form>
                     </td>
 
