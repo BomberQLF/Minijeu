@@ -17,8 +17,8 @@
 
 ## Comment jouer ?
 
-- **Attaquer :** Vous verrez deux pays, imaginons que vous êtes la France face à l'Allemagne, pour attaquer ce dernier il faut appuyer sur les boutons sous votre pays.
-Inversement, si vous êtes l'allemagne, vos boutons pour attaquer la France seront sous votre drapeau.
+- **Attaquer :** Vous verrez deux pays, imaginons que vous êtes la France face à l'Allemagne, pour attaquer ce dernier il faut appuyer sur les boutons sous son pays.
+Inversement, si vous êtes l'allemagne, vos boutons pour attaquer la France seront sous son drapeau.
 
 ## 🛠 Installation
 
