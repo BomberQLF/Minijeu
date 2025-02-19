@@ -1,4 +1,5 @@
 # 🌍 Battle of Nations
+- http://minijeu.murphy.butmmi.o2switch.site/index.php
 
 **Battle of Nations** est un mini-jeu en PHP qui simule un combat entre différents pays ayant des caractéristiques uniques telles que l'attaque, le renforcement, et l'utilisation de bombes nucléaires.
 
